@@ -12,10 +12,12 @@ using namespace std;
 
 class UserFile {
 
+    const string USERS_FILE;
+
 
 public:
 
-    UserFile(string fileName) {};
+    UserFile(string usersFileName) : USERS_FILE(usersFileName){};
 
     void addUserToXmlFile();
     int getLastIdfromXmlFile();

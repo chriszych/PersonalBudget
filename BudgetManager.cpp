@@ -44,14 +44,14 @@ void BudgetManager::showBalanceSheet(string reportType) {
 
         dateStart = currentYear*10000+currentMonth*100+1;
         dateFinish = currentYear*10000+currentMonth*100+days;
-        timePeriod = "current month";
+        timePeriod = "Current month";
 
 
     } else if (reportType == "previousMonth") {
 
         dateStart = currentYear*10000+previousMonth*100+1;
         dateFinish = currentYear*10000+previousMonth*100+prevDays;
-        timePeriod = "previous month";
+        timePeriod = "Previous month";
 
     } else if (reportType == "customPeriod") {
         string dateStartToCheck, dateFinishToCheck;
@@ -68,9 +68,10 @@ void BudgetManager::showBalanceSheet(string reportType) {
             dateFinish = atoi(dateFinishToCheck.c_str());
         } while(!CommonMethods::checkIfDateExist(dateFinishToCheck));
 
-        timePeriod.append(dateStartToCheck);
-        timePeriod.append(" to ");
-        timePeriod.append(dateFinishToCheck);
+        //timePeriod.append(dateStartToCheck);
+        //timePeriod.append(" to ");
+        //timePeriod.append(dateFinishToCheck);
+        timePeriod = "Custom period";
 
     } else {
         cout << "Wrong reportType parameter" << endl;
@@ -78,7 +79,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
 
     system("cls");
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "Balance sheet for: " << timePeriod << endl;
+    cout << "Balance sheet for: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
     cout << "------------------------------------------------------------------------" << endl;
     cout << "List of incomes: " << endl;
     cout << "------------------------------------------------------------------------" << endl;
@@ -125,7 +126,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
     }
 
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "       Summary: " << timePeriod << endl;
+    cout << "       Summary: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
     cout << "       Incomes: " << setw(12) << sumIncomes << endl;
     cout << "      Expenses: " << setw(12) << sumExpenses << endl;
     cout << "       Balance: " << setw(12) << sumIncomes - sumExpenses << endl;
