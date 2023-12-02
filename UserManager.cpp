@@ -22,33 +22,51 @@ int UserManager::loginUser() {
 
         string login = "", password = "";
 
+
+
+    //vector <User>::iterator itr = users.begin();
+    //while (itr != users.end()) {
     cout << "Logging user: " << endl;
     cout << "Enter login: ";
     login = CommonMethods::readLine();
-
-    vector <User>::iterator itr = users.begin();
-    while (itr != users.end()) {
-        if (itr -> getLogin() == login) {
+       // if (itr -> getLogin() == login) {
             for (int attemptNumber = 3; attemptNumber > 0; --attemptNumber) {
                 cout << "Attempt: " << 4 - attemptNumber << "/3. Enter password: ";
                 password = CommonMethods::readLine();
 
-                if (itr -> getPassword() == password) {
+                //if (itr -> getLogin() == login) {
+                //if (itr -> getPassword() == password) {
+                //test
+                //cout << endl << "login/pass: " << login << "/" << password << endl;
+                vector <User>::iterator itr = users.begin();
+                while (itr != users.end()) {
+//                        for (int attemptNumber = 3; attemptNumber > 0; --attemptNumber) {
+//                            cout << "Attempt: " << 4 - attemptNumber << "/3. Enter password: ";
+//                            password = CommonMethods::readLine();
+
+                if ((itr -> getLogin() == login) && (itr -> getPassword() == password)) {
                     setIdLoggedUser(itr -> getId());
                     idLoggedUser = itr -> getId();
-                     cout << "User : " << itr -> getFirstname() << " " << itr -> getLastname() << " (" << itr -> getId() << ") logged in successfully." << endl;
-                     system("pause");
+                     cout << "Logging " << itr -> getFirstname() << " " << itr -> getLastname() << " (" << itr -> getId() << ") in. Please wait.." << endl;
+                     //system("pause");
+                     Sleep(3000);
                     return idLoggedUser;
                 }
+                //test
+                ++itr;
             }
-            cout << "You have entered 3 times wrong password." << endl;
-            system("pause");
-            return 0;
-        }
-        ++itr;
+            //} //test
+//            cout << "Invalid user name or password. Try to login in again." << endl;
+//            system("pause");
+//            return 0;
+       // }
+      //  ++itr;
     }
-    cout << "The user name was not found. Try login with correct user name" << endl;
+    //cout << "The user name was not found. Try login with correct user name" << endl;
+    //system("pause");
+    cout << "Invalid user name or password. Try to login in again." << endl;
     system("pause");
+    //return 0;
     return 0;
 }
 

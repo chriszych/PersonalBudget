@@ -40,7 +40,7 @@ char CommonMethods::readChar() {
             lineChar = lineInput[0];
             break;
         }
-        cout << "This is not a single character. Enter again." << endl;
+        cout << "Enter single character only :";
     }
     return lineChar;
 }
@@ -203,4 +203,20 @@ int CommonMethods::getMonthNumberOfDays(int year, int month){
     int days = DAYS_PER_MONTH[(year % 4 == 0 && year % 100 != 0) || year % 400 == 0][month];
 
     return days;
+}
+
+string CommonMethods::formatDateForReport(int date){
+    string dateWithSeparators = "", tmpDate = "";
+
+    tmpDate  = convertIntToString(date);
+    //test
+    //cout << "Test tmp Date: " << tmpDate << " < ";
+    for(size_t i = 0; i < tmpDate.size(); ++i){
+        dateWithSeparators += tmpDate[i];
+        if (( i == 3) || (i == 5)){
+            dateWithSeparators += '-';
+        }
+    }
+
+return dateWithSeparators;
 }

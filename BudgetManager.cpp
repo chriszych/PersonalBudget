@@ -1,10 +1,10 @@
 #include "BudgetManager.h"
 
 void BudgetManager::addIncome() {
-    budgetItemFile.addIncomeToXmlFile(ID_LOGGED_USER, INCOMES_FILE);
+    budgetItemFile.addBudgetItemToXmlFile(ID_LOGGED_USER, INCOMES_FILE);
 }
 void BudgetManager::addExpense() {
-    budgetItemFile.addIncomeToXmlFile(ID_LOGGED_USER, EXPENSES_FILE);
+    budgetItemFile.addBudgetItemToXmlFile(ID_LOGGED_USER, EXPENSES_FILE);
 }
 void BudgetManager::loadIncomesFromXmlFile() {
     incomes = budgetItemFile.loadBudgetItemsFromXmlFile(ID_LOGGED_USER, INCOMES_FILE);
@@ -79,11 +79,11 @@ void BudgetManager::showBalanceSheet(string reportType) {
 
     system("cls");
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "Balance sheet for: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
+    cout << "Balance sheet for: " << timePeriod << ", from " << CommonMethods::formatDateForReport(dateStart) << " to " << CommonMethods::formatDateForReport(dateFinish) <<endl;
     cout << "------------------------------------------------------------------------" << endl;
     cout << "List of incomes: " << endl;
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "| No  |  Date  |   Amount  |   Description                             |" << endl;
+    cout << "| No |   Date   |   Amount   |   Description                           |" << endl;
     cout << "------------------------------------------------------------------------" << endl;
 
     if(incomes.size() > 0) {
@@ -94,7 +94,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
             if(checkIfDateIsInRange(itr -> getDate(), dateStart, dateFinish)) {
                 incomesTestResult = 1;
                 ++listNumber;
-                cout << "(" << setw(3) << setfill('0') << listNumber << ") " << itr -> getDate() << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
+                cout << " " << setw(3) << setfill('0') << listNumber << ". " << CommonMethods::formatDateForReport(itr -> getDate()) << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
                 sumIncomes += itr -> getAmount();
             }
         }
@@ -106,7 +106,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
     cout << "------------------------------------------------------------------------" << endl;
     cout << "List of expenses: " << endl;
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "| No  |  Date  |   Amount  |   Description                             |" << endl;
+    cout << "| No |   Date   |   Amount   |   Description                           |" << endl;
     cout << "------------------------------------------------------------------------" << endl;
 
     if(expenses.size() > 0) {
@@ -116,7 +116,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
             if(checkIfDateIsInRange(itr -> getDate(), dateStart, dateFinish)) {
                 expensesTestResult = 1;
                 ++listNumber;
-                cout << "(" << setw(3) << setfill('0') << listNumber << ") " << itr -> getDate() << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
+                cout << " " << setw(3) << setfill('0') << listNumber << ". " << CommonMethods::formatDateForReport(itr -> getDate()) << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
                 sumExpenses += itr -> getAmount();
             }
         }
@@ -126,7 +126,7 @@ void BudgetManager::showBalanceSheet(string reportType) {
     }
 
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "       Summary: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
+    cout << "       Summary: " << timePeriod << ", from " << CommonMethods::formatDateForReport(dateStart) << " to " << CommonMethods::formatDateForReport(dateFinish) <<endl;
     cout << "       Incomes: " << setw(12) << sumIncomes << endl;
     cout << "      Expenses: " << setw(12) << sumExpenses << endl;
     cout << "       Balance: " << setw(12) << sumIncomes - sumExpenses << endl;

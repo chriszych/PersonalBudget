@@ -11,7 +11,7 @@ char PersonalBudget::selectMainMenuOption(){
     cout << "2. Login user" << endl;
     cout << "9. Exit" << endl;
     cout << "---------------------------" << endl;
-    cout << "Your choice: ";
+    cout << "Your choice (1,2,9): ";
     menuSelection = CommonMethods::readChar();
 
     return menuSelection;
@@ -34,7 +34,7 @@ char PersonalBudget::selectUserMenuOption(){
     cout << "7. Change password" << endl;
     cout << "8. Log out" << endl;
     cout << "---------------------------------" << endl;
-    cout << "Your choice: ";
+    cout << "Your choice (1-5,7,8): ";
     menuSelection = CommonMethods::readChar();
 
     return menuSelection;

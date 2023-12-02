@@ -30,7 +30,7 @@ public:
     void setLastIncomeId(int newLastIncomeId);
     void setLastExpenseId(int newLastExpenseId);
 
-    void addIncomeToXmlFile(int idLoggedUser, string xmlFile);
+    void addBudgetItemToXmlFile(int idLoggedUser, string xmlFile);
     int getLastIdfromXmlFile(string xmlFile);
     vector <BudgetItem> loadBudgetItemsFromXmlFile(int ID_LOGGED_USER, string xmlFile);
 

@@ -30,6 +30,7 @@ public:
     static int getCurrentMonth();
     static bool checkIfDataIsDouble(string dataToCheck);
     static int getMonthNumberOfDays(int year, int month);
+    static string formatDateForReport(int date);
 
 };
 #endif

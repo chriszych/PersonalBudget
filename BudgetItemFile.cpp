@@ -18,7 +18,7 @@ void BudgetItemFile::setLastExpenseId(int newLastExpenseId){
     lastExpenseId = newLastExpenseId;
 }
 
-void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
+void BudgetItemFile::addBudgetItemToXmlFile(int idLoggedUser, string xmlFile) {
 
     CMarkup xml;
 
@@ -39,7 +39,7 @@ void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
 
@@ -50,7 +50,8 @@ void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
         xml.AddElem(mainXmlItem);
     }
     do{
-    cout << "Add " << addXmlItem << " with current date (Y/y) or with different date (N/n): ";
+    //cout << "Add " << addXmlItem << " with current date (Y/y) or with different date (N/n): ";
+    cout << "Add " << addXmlItem << " with current date: " << CommonMethods::formatDateForReport(CommonMethods::getCurrentDate()) << " (y/n): ";
         dateSelection = CommonMethods::readChar();
     } while(dateSelection != 'Y' && dateSelection != 'y' && dateSelection != 'N' && dateSelection != 'n');
 
@@ -105,7 +106,7 @@ int BudgetItemFile::getLastIdfromXmlFile(string xmlFile) {
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
     int maxIncomeId = 0;
@@ -151,7 +152,7 @@ vector <BudgetItem> BudgetItemFile::loadBudgetItemsFromXmlFile(int ID_LOGGED_USE
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
     xml.ResetPos();
