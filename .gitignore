@@ -5,3 +5,4 @@ plan/
 *.layout
 *.xml
 *.cbp
+*.cscope_file_list
