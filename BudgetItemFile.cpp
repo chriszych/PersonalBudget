@@ -18,7 +18,7 @@ void BudgetItemFile::setLastExpenseId(int newLastExpenseId){
     lastExpenseId = newLastExpenseId;
 }
 
-void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
+void BudgetItemFile::addBudgetItemToXmlFile(int idLoggedUser, string xmlFile) {
 
     CMarkup xml;
 
@@ -39,7 +39,7 @@ void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
 
@@ -50,29 +50,33 @@ void BudgetItemFile::addIncomeToXmlFile(int idLoggedUser, string xmlFile) {
         xml.AddElem(mainXmlItem);
     }
     do{
-    cout << "Add " << addXmlItem << " with current date (Y/y) or with different date (N/n): ";
-        dateSelection = CommonMethods::readChar();
+    cout << "Adding new " << addXmlItem << "/";
+    cout << "Add " << addXmlItem << " with current date: " << DateMethods::formatDateForReport(DateMethods::getCurrentDate()) << " (y/n): ";
+        dateSelection = ReadAndConvertMethods::readChar();
     } while(dateSelection != 'Y' && dateSelection != 'y' && dateSelection != 'N' && dateSelection != 'n');
 
     if (dateSelection == 'Y' || dateSelection == 'y') {
 
-            date = CommonMethods::convertIntToString(CommonMethods::getCurrentDate());
+            date = ReadAndConvertMethods::convertIntToString(DateMethods::getCurrentDate());
 
     } else {
 
     do{
-    cout << "Enter date: ";
-    date = CommonMethods::removeNotNumbers(CommonMethods::readLine());
-    }while (!CommonMethods::checkIfDateExist(date));
+    cout << "Adding new " << addXmlItem << "/";
+    cout << "Enter valid date (YYYYMMDD): ";
+    date = ReadAndConvertMethods::removeNotNumbers(ReadAndConvertMethods::readLine());
+    }while (!DateMethods::checkIfDateExist(date));
     }
 
         do {
+        cout << "Adding new " << addXmlItem << "/";
         cout << "Enter amount: ";
-        amount = CommonMethods::convertCommasToDots(CommonMethods::readLine());
-        } while (!CommonMethods::checkIfDataIsDouble(amount));
+        amount = ReadAndConvertMethods::convertCommasToDots(ReadAndConvertMethods::readLine());
+        } while (!ReadAndConvertMethods::checkIfDataIsDouble(amount));
 
+        cout << "Adding new " << addXmlItem << "/";
         cout << "Enter description: ";
-        description = CommonMethods::readLine();
+        description = ReadAndConvertMethods::readLine();
 
         userId = idLoggedUser;
 
@@ -105,7 +109,7 @@ int BudgetItemFile::getLastIdfromXmlFile(string xmlFile) {
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
     int maxIncomeId = 0;
@@ -151,7 +155,7 @@ vector <BudgetItem> BudgetItemFile::loadBudgetItemsFromXmlFile(int ID_LOGGED_USE
             addXmlItem = "Expense";
 
     } else {
-        cout << "XML file problem!" << endl;
+        cout << "Not defined XML file!" << endl;
     }
 
     xml.ResetPos();

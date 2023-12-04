@@ -14,9 +14,9 @@ class PersonalBudget {
 
     UserManager userManager;
     const int ID_LOGGED_USER = 0;
-    BudgetManager *budgetManager;
     const string INCOMES_FILE;
     const string EXPENSES_FILE;
+    BudgetManager *budgetManager;
 
 public:
 

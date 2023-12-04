@@ -6,16 +6,17 @@
 
 #include "Markup.h"
 #include "BudgetItem.h"
-#include "CommonMethods.h"
+#include "ReadAndConvertMethods.h"
+#include "DateMethods.h"
 
 using namespace std;
 
 class BudgetItemFile{
 
-    //const string INCOMES_FILE = "incomes.xml";
-    //const string EXPENSES_FILE = "expenses.xml";
     int lastIncomeId;
     int lastExpenseId;
+
+    int getLastIdfromXmlFile(string xmlFile);
 
 
 public:
@@ -30,8 +31,7 @@ public:
     void setLastIncomeId(int newLastIncomeId);
     void setLastExpenseId(int newLastExpenseId);
 
-    void addIncomeToXmlFile(int idLoggedUser, string xmlFile);
-    int getLastIdfromXmlFile(string xmlFile);
+    void addBudgetItemToXmlFile(int idLoggedUser, string xmlFile);
     vector <BudgetItem> loadBudgetItemsFromXmlFile(int ID_LOGGED_USER, string xmlFile);
 
 };

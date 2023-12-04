@@ -1,10 +1,12 @@
 #include "BudgetManager.h"
 
 void BudgetManager::addIncome() {
-    budgetItemFile.addIncomeToXmlFile(ID_LOGGED_USER, INCOMES_FILE);
+    budgetItemFile.addBudgetItemToXmlFile(ID_LOGGED_USER, INCOMES_FILE);
+    loadIncomesFromXmlFile();
 }
 void BudgetManager::addExpense() {
-    budgetItemFile.addIncomeToXmlFile(ID_LOGGED_USER, EXPENSES_FILE);
+    budgetItemFile.addBudgetItemToXmlFile(ID_LOGGED_USER, EXPENSES_FILE);
+    loadExpensesFromXmlFile();
 }
 void BudgetManager::loadIncomesFromXmlFile() {
     incomes = budgetItemFile.loadBudgetItemsFromXmlFile(ID_LOGGED_USER, INCOMES_FILE);
@@ -26,111 +28,149 @@ bool BudgetManager::checkIfDateIsInRange(int dateToCheck, int dateStart, int dat
 
 void BudgetManager::showBalanceSheet(string reportType) {
 
-    bool incomesTestResult = 0;
-    bool expensesTestResult = 0;
     double sumIncomes = 0;
     double sumExpenses = 0;
     int dateStart, dateFinish;
-    string dateStartToCheck, dateFinishToCheck;
     string timePeriod = "";
 
-    int currentYear = CommonMethods::getCurrentYear();
-    int currentMonth = CommonMethods::getCurrentMonth();
-    int previousMonth = currentMonth - 1;
-    int days = CommonMethods::getMonthNumberOfDays(currentYear, currentMonth);
-    int prevDays = CommonMethods::getMonthNumberOfDays(currentYear, previousMonth);
+    dateStart = calculateDateStart(reportType);
+    dateFinish = calculateDateFinish(reportType);
+    timePeriod = getTimePeriod(reportType);
 
-    if (reportType == "currentMonth") {
-
-        dateStart = currentYear*10000+currentMonth*100+1;
-        dateFinish = currentYear*10000+currentMonth*100+days;
-        timePeriod = "Current month";
-
-
-    } else if (reportType == "previousMonth") {
-
-        dateStart = currentYear*10000+previousMonth*100+1;
-        dateFinish = currentYear*10000+previousMonth*100+prevDays;
-        timePeriod = "Previous month";
-
-    } else if (reportType == "customPeriod") {
-        string dateStartToCheck, dateFinishToCheck;
-
-        do {
-            cout << "Enter start date for the report: ";
-            dateStartToCheck = CommonMethods::removeNotNumbers(CommonMethods::readLine());
-            dateStart = atoi(dateStartToCheck.c_str());
-        } while(!CommonMethods::checkIfDateExist(dateStartToCheck));
-
-        do {
-            cout << "Enter finish date for the report: ";
-            dateFinishToCheck = CommonMethods::removeNotNumbers(CommonMethods::readLine());
-            dateFinish = atoi(dateFinishToCheck.c_str());
-        } while(!CommonMethods::checkIfDateExist(dateFinishToCheck));
-
-        //timePeriod.append(dateStartToCheck);
-        //timePeriod.append(" to ");
-        //timePeriod.append(dateFinishToCheck);
-        timePeriod = "Custom period";
-
-    } else {
-        cout << "Wrong reportType parameter" << endl;
-    }
 
     system("cls");
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "Balance sheet for: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
-    cout << "------------------------------------------------------------------------" << endl;
-    cout << "List of incomes: " << endl;
-    cout << "------------------------------------------------------------------------" << endl;
-    cout << "| No  |  Date  |   Amount  |   Description                             |" << endl;
-    cout << "------------------------------------------------------------------------" << endl;
+    cout << "Balance sheet for: " << timePeriod << ", from " << DateMethods::formatDateForReport(dateStart) << " to " << DateMethods::formatDateForReport(dateFinish) <<endl;
 
-    if(incomes.size() > 0) {
-        int listNumber = 0;
-        cout << setprecision(2) << fixed << showpoint << right;
-
-        for (vector <BudgetItem>::iterator itr = incomes.begin(); itr != incomes.end(); ++itr) {
-            if(checkIfDateIsInRange(itr -> getDate(), dateStart, dateFinish)) {
-                incomesTestResult = 1;
-                ++listNumber;
-                cout << "(" << setw(3) << setfill('0') << listNumber << ") " << itr -> getDate() << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
-                sumIncomes += itr -> getAmount();
-            }
-        }
-    }
-    if (incomesTestResult == 0) {
-        cout << "-- No incomes for " << timePeriod << " --" << endl;
-    }
+    sumIncomes = displayListOfBudgetItems("incomes", timePeriod, dateStart, dateFinish, incomes);
+    sumExpenses = displayListOfBudgetItems("expenses", timePeriod, dateStart, dateFinish, expenses);
 
     cout << "------------------------------------------------------------------------" << endl;
-    cout << "List of expenses: " << endl;
-    cout << "------------------------------------------------------------------------" << endl;
-    cout << "| No  |  Date  |   Amount  |   Description                             |" << endl;
-    cout << "------------------------------------------------------------------------" << endl;
-
-    if(expenses.size() > 0) {
-        int listNumber = 0;
-
-        for (vector <BudgetItem>::iterator itr = expenses.begin(); itr != expenses.end(); ++itr) {
-            if(checkIfDateIsInRange(itr -> getDate(), dateStart, dateFinish)) {
-                expensesTestResult = 1;
-                ++listNumber;
-                cout << "(" << setw(3) << setfill('0') << listNumber << ") " << itr -> getDate() << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
-                sumExpenses += itr -> getAmount();
-            }
-        }
-    }
-    if (expensesTestResult == 0) {
-        cout << "-- No expenses for " << timePeriod << " --" << endl;
-    }
-
-    cout << "------------------------------------------------------------------------" << endl;
-    cout << "       Summary: " << timePeriod << ", from " << dateStart << " to " << dateFinish <<endl;
+    cout << "       Summary: " << timePeriod << ", from " << DateMethods::formatDateForReport(dateStart) << " to " << DateMethods::formatDateForReport(dateFinish) <<endl;
     cout << "       Incomes: " << setw(12) << sumIncomes << endl;
     cout << "      Expenses: " << setw(12) << sumExpenses << endl;
     cout << "       Balance: " << setw(12) << sumIncomes - sumExpenses << endl;
     cout << "------------------------------------------------------------------------" << endl;
     system("pause");
 
+}
+
+int BudgetManager::calculateDateStart(string reportType) {
+
+    int dateStart = 0;
+    string dateStartToCheck = "";
+
+    if (reportType == "currentMonth") {
+        dateStart = buildDate(currentYear, currentMonth, 1);
+
+    } else if (reportType == "previousMonth") {
+        dateStart = buildDate(currentYear, previousMonth, 1);
+
+    } else if (reportType == "customPeriod") {
+        cout << "Allowed date range from 2000-01-01 to " << DateMethods::formatDateForReport(buildDate(currentYear, currentMonth, days)) << " in YYYYMMDD format. " << endl;
+        dateStart = getCustomDate("start");
+
+    } else {
+        cout << "Wrong reportType parameter" << endl;
+    }
+    return dateStart;
+}
+
+int BudgetManager::calculateDateFinish(string reportType) {
+
+    int dateFinish = 0;
+    string dateFinishToCheck = "";
+
+    if (reportType == "currentMonth") {
+        dateFinish = buildDate(currentYear, currentMonth, days);
+
+    } else if (reportType == "previousMonth") {
+        dateFinish = buildDate(currentYear, previousMonth, prevDays);
+
+    } else if (reportType == "customPeriod") {
+        dateFinish = getCustomDate("finish");
+
+    } else {
+        cout << "Wrong reportType parameter" << endl;
+    }
+    return dateFinish;
+}
+
+string BudgetManager::getTimePeriod(string reportType) {
+    string timePeriod = "";
+
+    if (reportType == "currentMonth") {
+        timePeriod = "Current month";
+
+    } else if (reportType == "previousMonth") {
+        timePeriod = "Previous month";
+
+    } else if (reportType == "customPeriod") {
+        timePeriod = "Custom period";
+
+    } else {
+        cout << "Wrong reportType parameter" << endl;
+    }
+
+    return timePeriod;
+}
+
+int BudgetManager::getCustomDate(string dateType) {
+
+    string dateToCheck = "";
+    int customDate = 0;
+
+    do {
+        cout << "Preparing custom report/";
+        cout << "Enter " << dateType << " date for the report (YYYYMMDD): ";
+        dateToCheck = ReadAndConvertMethods::removeNotNumbers(ReadAndConvertMethods::readLine());
+        customDate = atoi(dateToCheck.c_str());
+    } while(!DateMethods::checkIfDateExist(dateToCheck));
+
+    return customDate;
+}
+
+int BudgetManager::buildDate(int year, int month, int day) {
+    return year * 10000 + month * 100 + day;
+}
+
+int BudgetManager::getMonthBefore(int month) {
+    int previousMonth = 0;
+
+    if (month != 1) {
+        previousMonth = month - 1;
+    } else {
+        previousMonth = 12;
+    }
+    return previousMonth;
+}
+
+double BudgetManager::displayListOfBudgetItems(string budgetItem, string timePeriod, int dateStart, int dateFinish, vector <BudgetItem> budgetItems) {
+
+    double sumOfBudgetItems = 0;
+    bool budgetItemTestResult = 0;
+
+    cout << "------------------------------------------------------------------------" << endl;
+    cout << "                   List of " << budgetItem << ":                        " << endl;
+    cout << "------------------------------------------------------------------------" << endl;
+    cout << "| No |   Date   |   Amount   |   Description                           |" << endl;
+    cout << "------------------------------------------------------------------------" << endl;
+
+    if(budgetItems.size() > 0) {
+        int listNumber = 0;
+        cout << setprecision(2) << fixed << showpoint << right;
+
+        for (vector <BudgetItem>::iterator itr = budgetItems.begin(); itr != budgetItems.end(); ++itr) {
+            if(checkIfDateIsInRange(itr -> getDate(), dateStart, dateFinish)) {
+                budgetItemTestResult = 1;
+                ++listNumber;
+                cout << " " << setw(3) << setfill('0') << listNumber << ". " << DateMethods::formatDateForReport(itr -> getDate()) << " " << setw(12) << setfill(' ') << itr -> getAmount() << " " << itr -> getDescription() << endl;
+                sumOfBudgetItems += itr -> getAmount();
+            }
+        }
+    }
+    if (budgetItemTestResult == 0) {
+        cout << "-- No " << budgetItem << " for " << timePeriod << " --" << endl;
+    }
+    return sumOfBudgetItems;
 }

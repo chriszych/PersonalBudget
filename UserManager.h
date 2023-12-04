@@ -9,7 +9,7 @@
 
 #include "User.h"
 #include "UserFile.h"
-#include "CommonMethods.h"
+#include "ReadAndConvertMethods.h"
 
 using namespace std;
 
@@ -34,10 +34,8 @@ public:
     void setIdLoggedUser(int newIdLoggedUser);
 
     void registerUser();
-    void showAllUsers();
     int loginUser();
 
-    void loadUsersFromXmlFile();
     void changeLoggedUserPassword();
     void logoutCurrentUser();
     bool isUserLoggedIn();

@@ -1,6 +1,6 @@
 #include "PersonalBudget.h"
 
-char PersonalBudget::selectMainMenuOption(){
+char PersonalBudget::selectMainMenuOption() {
 
     char menuSelection;
 
@@ -11,12 +11,12 @@ char PersonalBudget::selectMainMenuOption(){
     cout << "2. Login user" << endl;
     cout << "9. Exit" << endl;
     cout << "---------------------------" << endl;
-    cout << "Your choice: ";
-    menuSelection = CommonMethods::readChar();
+    cout << "Your choice (1,2,9): ";
+    menuSelection = ReadAndConvertMethods::readChar();
 
     return menuSelection;
 }
-char PersonalBudget::selectUserMenuOption(){
+char PersonalBudget::selectUserMenuOption() {
 
     char menuSelection;
 
@@ -34,17 +34,17 @@ char PersonalBudget::selectUserMenuOption(){
     cout << "7. Change password" << endl;
     cout << "8. Log out" << endl;
     cout << "---------------------------------" << endl;
-    cout << "Your choice: ";
-    menuSelection = CommonMethods::readChar();
+    cout << "Your choice (1-5,7,8): ";
+    menuSelection = ReadAndConvertMethods::readChar();
 
     return menuSelection;
 }
 
-void PersonalBudget::registerUser(){
+void PersonalBudget::registerUser() {
     userManager.registerUser();
 }
 
-void PersonalBudget::loginUser(){
+void PersonalBudget::loginUser() {
     userManager.loginUser();
 
     if(userManager.isUserLoggedIn()) {
@@ -52,25 +52,23 @@ void PersonalBudget::loginUser(){
     }
 }
 
-bool PersonalBudget::isUserLoggedIn(){
+bool PersonalBudget::isUserLoggedIn() {
     return userManager.isUserLoggedIn();
 }
-void PersonalBudget::changeLoggedUserPassword(){
-     userManager.changeLoggedUserPassword();
+void PersonalBudget::changeLoggedUserPassword() {
+    userManager.changeLoggedUserPassword();
 }
-void PersonalBudget::logoutCurrentUser(){
-     userManager.logoutCurrentUser();
+void PersonalBudget::logoutCurrentUser() {
+    userManager.logoutCurrentUser();
 }
 
-void PersonalBudget::addIncome(){
+void PersonalBudget::addIncome() {
     budgetManager -> addIncome();
 }
-void PersonalBudget::addExpense(){
+void PersonalBudget::addExpense() {
     budgetManager -> addExpense();
 }
-void PersonalBudget::showBalanceSheet(string timePeriod){
-    budgetManager -> loadIncomesFromXmlFile();
-    budgetManager -> loadExpensesFromXmlFile();
+void PersonalBudget::showBalanceSheet(string timePeriod) {
     budgetManager -> showBalanceSheet(timePeriod);
 }
 

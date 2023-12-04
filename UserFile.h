@@ -6,24 +6,23 @@
 
 #include "User.h"
 #include "Markup.h"
-#include "CommonMethods.h"
+#include "ReadAndConvertMethods.h"
 
 using namespace std;
 
 class UserFile {
 
     const string USERS_FILE;
-
+    int getLastIdfromXmlFile();
+    bool findLoginInXmlFile(string findLogin);
 
 public:
 
     UserFile(string usersFileName) : USERS_FILE(usersFileName){};
 
     void addUserToXmlFile();
-    int getLastIdfromXmlFile();
-    void displayAllUsers();
     vector <User> loadUsersFromXmlFile();
     void changeUserPasswordByIdInXmlFile(int findUserId, string newPassword);
-    bool findLoginInXmlFile(string findLogin);
+
 };
 #endif
